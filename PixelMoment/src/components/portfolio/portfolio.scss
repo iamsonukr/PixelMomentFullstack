@@ -1,0 +1,136 @@
+@import '../../app.scss';
+
+.projects{
+    height: 109vw;
+}
+
+.portfolio{
+    position: relative;
+
+    .progress{
+        position: sticky;
+        top: 0;
+        left: 0;
+        padding-top: 10px ;
+        text-align: center;
+        color: #1A1A1A;
+        font-size: 35px;
+        background-image: linear-gradient(to-bottom (green));
+        z-index: 9;
+        background-color: #E5E5E5;
+        @include mobile{
+            // padding-top: calc(100vh - 100px);
+            padding-top: 10px;
+            background-color: #E5E5E5;
+            font-size: 18px;
+            // z-index: 99994;
+        }
+
+        h1{
+
+        }
+
+        .progressBar{
+            margin-top: 10px;
+            // padding-top: 100px;
+            height: 10px;
+            background-color: rgb(96, 96, 96);
+            @include mobile{
+                height: 5px;
+            }
+
+        }
+    }
+
+    .container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+
+        .wrapper{
+            max-width: 1366px;
+            height: 100%;
+            margin: auto;
+            display: flex;
+            gap: 50px;
+            align-items: center;
+            justify-content: center;
+
+            @include mobile{
+                flex-direction: column;
+            }
+
+            .imageContainer{
+                flex: 1;
+                height: 50%;
+                @include mobile{
+                    width: 100%;
+                    max-height: 300px;
+                }
+                
+                img{
+                    flex: 1;
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+
+                    @include mobile{
+                        object-fit: contain;
+                    }
+                }
+            }
+                .textContainer{
+                flex:1;
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+
+                @include mobile{
+                    // transform: none !important;
+                    padding: 10px;
+                    align-items: center;
+                    text-align: center;
+                    padding: 0px 0px 0px 0px;
+                   height: 10px;
+                }
+
+                
+
+                h2{
+                    font-size: 4    2px;
+                    @include mobile{
+                        font-size: 36px;
+                    }
+                }
+                p{
+                    color: gray;
+                    font-size: 20px;
+                    @include mobile{
+                        font-size: 16px;
+                        display: none;
+                    }
+                }
+                button{
+                    // background-color: orange;
+                    border: 1px solid #1a1a1a;
+                    background-color: white;
+                    // border: none;
+                    // border-radius: 10px;
+                    // gap: 10px;
+                    margin-right: 10px;
+                    padding: 10px;
+                    width: 200px;
+                    cursor: pointer;
+
+                    &:hover{
+                        background-color: black;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}

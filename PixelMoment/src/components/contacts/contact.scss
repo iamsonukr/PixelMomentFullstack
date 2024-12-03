@@ -1,0 +1,142 @@
+@import '../../app.scss';
+
+.contact{
+    height: 100%;
+    max-width: 1366px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+
+    @include mobile{
+        width: 100%;
+        padding: 10px;
+        flex-direction: column;
+        transform: none !important; //changes
+        opacity: 1 !important; //changes
+    }
+
+    .textContainer{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+
+      
+        @include mobile{
+            transform: none !important;   //changes
+            opacity: 1 !important;  //changes
+            gap: 20px;
+            text-align: center;
+            align-items: center;
+            margin-top: 70px;
+        }
+        h1{
+            font-size: 100px;
+            line-height: 88px;
+            @include mobile{
+                // padding-top: calc(100vh - 100px);
+                font-size: 36px;
+            }   
+        }
+        span{
+            font-weight: 300;
+        }
+        
+        .item{
+
+            @include mobile{
+                transform: none !important;   //changes
+            opacity: 1 !important;  //changes
+                
+            } 
+        }
+    }
+    .formContainer{
+        flex: 1;
+        position: relative;
+
+        @include mobile{
+            padding: 10px;
+            width: 100%;
+        }
+    }
+    
+    .planSelection {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+      
+        h3 {
+          font-size: 1.25rem;
+          font-weight: bold;
+          margin-bottom: 1rem;
+          color: #333;
+        }
+      
+        label {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.75rem;
+          cursor: pointer;
+      
+          input[type="radio"] {
+            margin-right: 0.75rem;
+            accent-color: #f76c6c; // customize radio button color
+          }
+      
+          &:hover {
+            background-color: #f2f2f2;
+            border-radius: 4px;
+            
+          }
+        }
+      }
+
+    .phoneSVG{
+        position: absolute;
+        margin: auto;
+        // color: pink;
+        // stroke: white;
+    }
+
+    form{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        
+        input,textarea{
+            padding: 20px;
+            background-color: transparent;
+            border: 1px solid gray;
+            color: gray;
+            border-radius: 5px;
+            outline: none ;
+            box-shadow: none;
+            // -webkit-appearance: none;
+            // -moz-appearance: none;
+            // appearance: none;
+
+            @include mobile{
+                // padding-top: calc(100vh - 100px);
+                // font-size: 24px;
+            }
+        }
+        button{
+            padding: 20px;
+            border: none;
+            background-color: orange;
+            cursor: pointer;
+            font-weight: 500;
+            @include mobile{
+                // padding-top: calc(100vh - 100px);
+                font-size: 24px;
+            }
+
+        }
+    }
+
+}
