@@ -9,6 +9,7 @@ import PricingSection from './components/pricing/PricingSection';
 import Services from './components/services/Services';
 
 function App() {
+  const url='https://pixelmomentfullstack.onrender.com'
   return (
     <div>
       {/* <Cursor/> */}
@@ -20,8 +21,8 @@ function App() {
       <section><Services/></section>
       <section id='Portfolio'><Parallax type="portfolio"/></section>
       <Portfolio/>
-      <PricingSection/>
-      <section id='Contact'><Contact/></section>
+      <PricingSection />
+      <section id='Contact'><Contact url={url}/></section>
     </div>
   );
 }

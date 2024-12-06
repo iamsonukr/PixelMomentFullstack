@@ -17,7 +17,7 @@ const variants = {
 
 
 
-export const Contact = () => {
+export const Contact = ({url}) => {
   const [error, setError] = useState(null);
   const [sent, setSent] = useState(false);
   const [paymentVerify, setPaymenVerify] = useState(false)
@@ -39,7 +39,7 @@ export const Contact = () => {
     e.preventDefault(); // Prevent default form submission
     try {
       const response = await axios.post(
-        'http://localhost:5009/api/order/place',
+        `${url}/api/order/place`,
         { amount, currency, receipt: receiptId },
         {
           headers: { 'Content-Type': 'application/json' },
@@ -59,7 +59,7 @@ export const Contact = () => {
         handler: async (response) => {
           console.log('Payment Successful', response);
           try {
-            await axios.post('http://localhost:5009/api/order/verify', response);
+            await axios.post(`${url}/api/order/verify`, response);
             setPaymenVerify(true)
             await sendRealEmail()
             console.log("Payment verifyed")
