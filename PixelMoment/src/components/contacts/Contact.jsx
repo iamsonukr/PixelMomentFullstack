@@ -22,6 +22,7 @@ export const Contact = ({url}) => {
   const [sent, setSent] = useState(false);
   const [paymentVerify, setPaymenVerify] = useState(false)
   const [amount,setAmount]=useState(null)
+  const [submitting,setSubmitting]=useState(false)
   const ref = useRef();
   const formRef = useRef();
 
@@ -37,6 +38,11 @@ export const Contact = ({url}) => {
 
   const sendEmail = async (e) => {
     e.preventDefault(); // Prevent default form submission
+    if(submitting){
+      window.alert("Please wait payment in progress...")
+      return
+    }
+    setSubmitting(true)
     try {
       const response = await axios.post(
         `${url}/api/order/place`,
@@ -88,6 +94,8 @@ export const Contact = ({url}) => {
       paymentWindow.open();
     } catch (error) {
       console.error('Payment initiation failed:', error);
+    }finally{
+      setSubmitting(false)
     }
   }
   // sending email
