@@ -17,7 +17,7 @@ const variants = {
 
 
 
-export const Contact = ({url}) => {
+export const Contact = ({url, setPaymentProgress,paymentProgress}) => {
   const [error, setError] = useState(null);
   const [sent, setSent] = useState(false);
   const [paymentVerify, setPaymenVerify] = useState(false)
@@ -44,6 +44,7 @@ export const Contact = ({url}) => {
     }
     setSubmitting(true)
     try {
+      setPaymentProgress(true)
       const response = await axios.post(
         `${url}/api/order/place`,
         { amount, currency, receipt: receiptId },
@@ -51,7 +52,7 @@ export const Contact = ({url}) => {
           headers: { 'Content-Type': 'application/json' },
         }
       );
-
+      setPaymentProgress(false)
       const order = response.data;
 
       const paymentWindowConfig = {
@@ -75,6 +76,8 @@ export const Contact = ({url}) => {
             }
           } catch (error) {
             console.error('Payment validation failed:', error);
+          }finally{
+            setPaymentProgress(false)
           }
         },
         prefill: {
