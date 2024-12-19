@@ -132,13 +132,7 @@
                 width: 100%;
                 text-align: center;
                 border: 1px solid black;
-                &:hover{
-                    position: relative;
-                    transform: scale(1.8);
-                    h2{
-                        display: none;
-                    }
-                }
+               
 
                 h2{
                     font-size: 20px;
@@ -154,7 +148,6 @@
 
         .box:hover{
             p{
-
                 color: white;
             }
             h2{
