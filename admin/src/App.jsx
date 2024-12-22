@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar/Sidebar'
 import OrdersDashboard from './components/Orders/OrdersDashboard'
 import EmployeeDashboard from './components/Employee/EmployeeDashboard'
 import { Routes,Route } from 'react-router-dom'
+import './App.scss'
 
 // import { Route } from 'lucide-react'
 
