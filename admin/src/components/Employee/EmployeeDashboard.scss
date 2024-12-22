@@ -1,0 +1,230 @@
+// src/components/Dashboard/EmployeeDashboard.scss
+.employee-dashboard {
+    padding: 20px;
+  
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+  
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #333;
+      }
+  
+      .add-btn {
+        padding: 10px 20px;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+  
+        &:hover {
+          background-color: #1976d2;
+        }
+      }
+    }
+  
+    .search-section {
+      margin-bottom: 24px;
+  
+      .search-input {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+  
+        &:focus {
+          outline: none;
+          border-color: #2196f3;
+        }
+      }
+    }
+  
+    .form-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+  
+    .form-container {
+      background-color: white;
+      padding: 24px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+  
+      h2 {
+        margin-bottom: 20px;
+        color: #333;
+      }
+  
+      .form-group {
+        margin-bottom: 16px;
+  
+        label {
+          display: block;
+          margin-bottom: 8px;
+          color: #555;
+        }
+  
+        input, textarea {
+          width: 100%;
+          padding: 8px 12px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 14px;
+  
+          &:focus {
+            outline: none;
+            border-color: #2196f3;
+          }
+        }
+  
+        textarea {
+          min-height: 80px;
+          resize: vertical;
+        }
+      }
+  
+      .skills-input {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+  
+        input {
+          flex: 1;
+        }
+  
+        button {
+          padding: 8px 16px;
+          background-color: #2196f3;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      }
+  
+      .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+  
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+  
+        button {
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: pointer;
+  
+          &[type="button"] {
+            background-color: #fff;
+            border: 1px solid #ddd;
+          }
+  
+          &[type="submit"] {
+            background-color: #2196f3;
+            color: white;
+            border: none;
+          }
+        }
+      }
+    }
+  
+    .table-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow-x: auto;
+    }
+  
+    .employees-table {
+      width: 100%;
+      border-collapse: collapse;
+      
+      th, td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+  
+      th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #444;
+      }
+  
+      .skill-tag {
+        display: inline-block;
+        padding: 4px 8px;
+        background-color: #e3f2fd;
+        color: #1976d2;
+        border-radius: 4px;
+        font-size: 12px;
+        margin: 2px;
+  
+        button {
+          background: none;
+          border: none;
+          margin-left: 4px;
+          cursor: pointer;
+          color: #666;
+        }
+      }
+  
+      .edit-btn, .delete-btn {
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 8px;
+        font-size: 13px;
+      }
+  
+      .edit-btn {
+        background-color: #fff;
+        border: 1px solid #2196f3;
+        color: #2196f3;
+  
+        &:hover {
+          background-color: #e3f2fd;
+        }
+      }
+  
+      .delete-btn {
+        background-color: #fff;
+        border: 1px solid #dc3545;
+        color: #dc3545;
+  
+        &:hover {
+          background-color: #fee2e2;
+        }
+      }
+    }
+  
+    .skills-display {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+  }

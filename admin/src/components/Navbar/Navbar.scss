@@ -1,0 +1,116 @@
+// src/components/Navbar/Navbar.scss
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 70px;
+  
+    .navbar-brand {
+      h2 {
+        color: #2c3e50;
+        margin: 0;
+        font-size: 1.5rem;
+      }
+  
+      span {
+        color: #7f8c8d;
+        font-size: 0.875rem;
+      }
+    }
+  
+    .navbar-search {
+      flex: 1;
+      max-width: 500px;
+      margin: 0 2rem;
+  
+      .search-wrapper {
+        position: relative;
+        width: 100%;
+  
+        .search-icon {
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #95a5a6;
+        }
+  
+        input {
+          width: 100%;
+          padding: 0.75rem 1rem 0.75rem 3rem;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          font-size: 0.875rem;
+          
+          &:focus {
+            outline: none;
+            border-color: #3498db;
+          }
+        }
+      }
+    }
+  
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+  
+      .notification-wrapper {
+        position: relative;
+        cursor: pointer;
+  
+        .notification-badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: #e74c3c;
+          color: white;
+          border-radius: 50%;
+          padding: 0.25rem;
+          font-size: 0.75rem;
+          min-width: 18px;
+          height: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+  
+      .divider {
+        height: 32px;
+        width: 1px;
+        background-color: #e0e0e0;
+      }
+  
+      .admin-profile {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+  
+        .admin-info {
+          text-align: right;
+  
+          .admin-name {
+            margin: 0;
+            font-weight: 500;
+            color: #2c3e50;
+          }
+  
+          .admin-role {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+          }
+        }
+  
+        .admin-avatar {
+          background-color: #f0f2f5;
+          padding: 0.5rem;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
