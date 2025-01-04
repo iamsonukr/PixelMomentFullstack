@@ -11,7 +11,9 @@ import PricingSection from './components/pricing/PricingSection';
 import Services from './components/services/Services';
 
 function App() {
-  const url='https://pixelmomentfullstack.onrender.com'
+  // const url='https://pixelmomentfullstack.onrender.com'
+  const url='http://localhost:5002'
+
   const [paymentProgress,setPaymentProgress]=useState(false)
   if(paymentProgress){
     return <PleaseWait/>

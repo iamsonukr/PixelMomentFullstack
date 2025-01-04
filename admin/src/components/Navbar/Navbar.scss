@@ -7,16 +7,19 @@
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     height: 70px;
+    background: url('./Night_sky-2.jpg') top/cover no-repeat;
+    background-color: rgba(36, 35, 35, 0.242);
+    backdrop-filter:blur(10px);
   
     .navbar-brand {
       h2 {
-        color: #2c3e50;
+        color: #e6e6e6;
         margin: 0;
         font-size: 1.5rem;
       }
   
       span {
-        color: #7f8c8d;
+        color: #e6e6e6;
         font-size: 0.875rem;
       }
     }
@@ -35,7 +38,7 @@
           left: 1rem;
           top: 50%;
           transform: translateY(-50%);
-          color: #95a5a6;
+          color: #e6e6e6;
         }
   
         input {
@@ -82,7 +85,7 @@
       .divider {
         height: 32px;
         width: 1px;
-        background-color: #e0e0e0;
+        background-color: #e6e6e6;
       }
   
       .admin-profile {
@@ -97,7 +100,7 @@
           .admin-name {
             margin: 0;
             font-weight: 500;
-            color: #2c3e50;
+            color: #e6e6e6;
           }
   
           .admin-role {

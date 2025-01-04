@@ -6,6 +6,7 @@ import OrdersDashboard from './components/Orders/OrdersDashboard'
 import EmployeeDashboard from './components/Employee/EmployeeDashboard'
 import { Routes,Route } from 'react-router-dom'
 import './App.scss'
+import Footer from './components/Footer/Footer'
 
 // import { Route } from 'lucide-react'
 
@@ -26,6 +27,9 @@ const App = () => {
             {/* <Route path="/manage-emp/:id?" element={<CreateEmp />} /> */}
           </Routes>
         </div>
+      </div>
+      <div className="">
+        <Footer />
       </div>
     </div>
   )
