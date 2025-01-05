@@ -10,6 +10,16 @@ const getAllEmployees=async(req,res)=>{
         return res.status(500).send({success:false,message:"Error fetching employees"})
     }
 }
+const getSinpleEmp=async(req,res)=>{
+    const {id}=req.params
+    try {
+        const employees=await Employee.findById(id)
+        return res.status(200).send({success:true,data:employees})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({success:false,message:"Error fetching employees"})
+    }
+}
 
 const createEmployee=async(req,res)=>{
     const newEmployee= new Employee({
@@ -25,24 +35,36 @@ const createEmployee=async(req,res)=>{
     return res.send({success:true,message:"User Created Successfully"})
 }
 
-const updateEmployee=async(req,res)=>{
-    const id=req.params.id
+const updateEmployee = async (req, res) => {
+    const id = req.params.id;
+    console.log(req.body)
     try {
-        const employee=await Employee.findById(id)
-        employee.name=req.body.name || employee.name,
-        employee.email=req.body.email || employee.email,
-        employee.phone=req.body.phone || employee.phone,
-        employee.dateOfBirth=req.body.dateOfBirth || employee.dateOfBirth,
-        employee.address=req.body.dateOfBirth || employee.dateOfBirth,
-        employee.skills=req.body.skills || employee.skills
-        await employee.save()
-        return res.status(200).send({success:true,message:"Employee updated successfully !"})
-
+      const employee = await Employee.findById(id);
+      if (!employee) {
+        return res
+          .status(404)
+          .send({ success: false, message: "Employee not found" });
+      }
+  
+      employee.name = req.body.name || employee.name;
+      employee.email = req.body.email || employee.email;
+      employee.phone = req.body.phone || employee.phone;
+      employee.dateOfBirth = req.body.dateOfBirth || employee.dateOfBirth;
+      employee.address = req.body.address || employee.address;
+      employee.skills = req.body.skills || employee.skills;
+  
+      await employee.save();
+      return res
+        .status(200)
+        .send({ success: true, message: "Employee updated successfully!" });
     } catch (error) {
-        console.log(error)
-        return res.status(500).send({success:false,message:"Employee update failed"})
+      console.error("Error updating employee:", error);
+      return res
+        .status(500)
+        .send({ success: false, message: "Employee update failed" });
     }
-}
+  };
+  
 
 const removeEmployee=async(req,res)=>{
     const id=req.params.id
@@ -55,4 +77,4 @@ const removeEmployee=async(req,res)=>{
     }
 }
 
-export {removeEmployee,updateEmployee,getAllEmployees,createEmployee}
+export {removeEmployee,updateEmployee,getAllEmployees,createEmployee,getSinpleEmp}

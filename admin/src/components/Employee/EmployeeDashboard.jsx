@@ -1,32 +1,18 @@
 // src/components/Dashboard/EmployeeDashboard.jsx
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
+import { CentralGovContext } from '../../context/CentralGovContext';
 import './EmployeeDashboard.scss';
+import { EmployeeContext } from '../../context/EmployeeContext';
+import {toast} from 'react-toastify'
 
 const EmployeeDashboard = () => {
-  // Sample data following the schema
-  const [employees, setEmployees] = useState([
-    {
-      _id: '1',
-      name: 'Alex Thompson',
-      email: 'alex@pixelmoments.com',
-      phone: 9876543210,
-      dateOfBirth: '1990-05-15',
-      address: '123 Photography Lane, Creative City',
-      skills: ['Wedding Photography', 'Portrait', 'Event Coverage']
-    },
-    {
-      _id: '2',
-      name: 'Maria Garcia',
-      email: 'maria@pixelmoments.com',
-      phone: 8765432109,
-      dateOfBirth: '1992-08-20',
-      address: '456 Camera Street, Art District',
-      skills: ['Product Photography', 'Fashion', 'Landscape']
-    }
-  ]);
-
+  const { token, url } = useContext(CentralGovContext);
+  const { allEmployee } = useContext(EmployeeContext)
+  const [employees, setEmployees] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -36,12 +22,25 @@ const EmployeeDashboard = () => {
     skills: []
   });
   const [skillInput, setSkillInput] = useState('');
+  const [editingEmployeeId, setEditingEmployeeId] = useState(null);
+
+  useEffect(() => {
+    if (allEmployee) {
+      console.log("Employees data fetched: ", allEmployee);
+      setEmployees(allEmployee);  // Update local state with allEmployees from context
+    }
+  }, [allEmployee]);  // Will run every time allEmployees changes
+
+  if (!allEmployee) {
+    // Display loading or some message until data is fetched
+    return <div>Loading employees...</div>;
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'phone' ? Number(value) : value
+      [name]: name === 'phone' ? Number(value) : value,
     }));
   };
 
@@ -49,7 +48,7 @@ const EmployeeDashboard = () => {
     if (skillInput.trim()) {
       setFormData(prev => ({
         ...prev,
-        skills: [...prev.skills, skillInput.trim()]
+        skills: [...prev.skills, skillInput.trim()],
       }));
       setSkillInput('');
     }
@@ -58,17 +57,66 @@ const EmployeeDashboard = () => {
   const handleRemoveSkill = (skillToRemove) => {
     setFormData(prev => ({
       ...prev,
-      skills: prev.skills.filter(skill => skill !== skillToRemove)
+      skills: prev.skills.filter(skill => skill !== skillToRemove),
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    const newEmployee = {
-      _id: Date.now().toString(),
-      ...formData
-    };
-    setEmployees(prev => [...prev, newEmployee]);
+    try {
+      let endPoint='';
+      if(editingEmployeeId){
+        endPoint=`${url}/api/admin/employee/update-employee/${editingEmployeeId}`
+      }else{
+        endPoint=`${url}/api/admin/employee/create-employee/`
+      }
+      console.log("THis is the endpoint," ,endPoint)
+      const response=await axios.post(endPoint, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if(editingEmployeeId){
+        toast.success("Employee data updated successfully")
+      }else{
+        toast.success("Employee created successfully")
+      }
+      setShowForm(false)
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  const handleEdit = async(id) => {
+    try {
+      
+      const response=await axios.get(`${url}/api/admin/employee/single-employees/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      
+      setFormData(response.data.data);
+      setEditingEmployeeId(id);
+      setShowForm(true);
+      console.log(response)
+    } catch (error) {
+        console.log(error)
+    }
+  };
+
+  const handleDelete = (id) => {
+    try {
+      if (window.confirm('Are you sure you want to delete this employee?')) {
+        const res=axios.post(`${url}/api/admin/employee/remove-employee/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          console.log(res.data)
+          
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  const resetForm = () => {
     setFormData({
       name: '',
       email: '',
@@ -77,16 +125,13 @@ const EmployeeDashboard = () => {
       address: '',
       skills: []
     });
+    setSkillInput('');
+    setEditingEmployeeId(null);
     setShowForm(false);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this employee?')) {
-      setEmployees(prev => prev.filter(emp => emp._id !== id));
-    }
-  };
-
-  const filteredEmployees = employees.filter(emp => 
+  const filteredEmployees = employees.filter(emp =>
+    // const filteredEmployees = employees.map(emp =>
     emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     emp.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -112,16 +157,18 @@ const EmployeeDashboard = () => {
         />
       </div>
 
-      {/* Add Employee Form */}
+      {/* Add/Edit Employee Form */}
       {showForm && (
         <div className="form-overlay">
           <div className="form-container">
-            <h2>Add New Employee</h2>
+            <h2>{editingEmployeeId ? 'Edit Employee' : 'Add New Employee'}</h2>
             <form onSubmit={handleSubmit}>
+              {/* Name Field */}
               <div className="form-group">
-                <label>Name*</label>
+                <label htmlFor="name">Name:</label>
                 <input
                   type="text"
+                  id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
@@ -129,10 +176,12 @@ const EmployeeDashboard = () => {
                 />
               </div>
 
+              {/* Email Field */}
               <div className="form-group">
-                <label>Email*</label>
+                <label htmlFor="email">Email:</label>
                 <input
                   type="email"
+                  id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
@@ -140,10 +189,12 @@ const EmployeeDashboard = () => {
                 />
               </div>
 
+              {/* Phone Field */}
               <div className="form-group">
-                <label>Phone*</label>
+                <label htmlFor="phone">Phone:</label>
                 <input
                   type="number"
+                  id="phone"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
@@ -151,54 +202,75 @@ const EmployeeDashboard = () => {
                 />
               </div>
 
+              {/* Date of Birth Field */}
               <div className="form-group">
-                <label>Date of Birth</label>
+                <label htmlFor="dateOfBirth">Date of Birth:</label>
                 <input
                   type="date"
+                  id="dateOfBirth"
                   name="dateOfBirth"
                   value={formData.dateOfBirth}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
 
+              {/* Address Field */}
               <div className="form-group">
-                <label>Address</label>
+                <label htmlFor="address">Address:</label>
                 <textarea
+                  id="address"
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                />
+                  required
+                ></textarea>
               </div>
 
+              {/* Skills Section */}
               <div className="form-group">
-                <label>Skills*</label>
+                <label htmlFor="skills">Skills:</label>
                 <div className="skills-input">
                   <input
                     type="text"
+                    id="skills"
+                    placeholder="Add a skill"
                     value={skillInput}
                     onChange={(e) => setSkillInput(e.target.value)}
-                    placeholder="Enter a skill"
                   />
-                  <button type="button" onClick={handleAddSkill}>Add</button>
+                  <button type="button" onClick={handleAddSkill}>
+                    Add Skill
+                  </button>
                 </div>
-                <div className="skills-list">
+                <ul className="skills-list">
                   {formData.skills.map((skill, index) => (
-                    <span key={index} className="skill-tag">
+                    <li key={index}>
                       {skill}
-                      <button onClick={() => handleRemoveSkill(skill)}>&times;</button>
-                    </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSkill(skill)}
+                      >
+                        Remove
+                      </button>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
+              {/* Form Actions */}
               <div className="form-actions">
-                <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
-                <button type="submit">Save Employee</button>
+                <button type="button" onClick={resetForm}>
+                  Cancel
+                </button>
+                <button type="submit">
+                  {editingEmployeeId ? 'Update Employee' : 'Save Employee'}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
 
       {/* Employees Table */}
       <div className="table-container">
@@ -215,7 +287,7 @@ const EmployeeDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredEmployees.map((employee) => (
+            {filteredEmployees.map(employee => (
               <tr key={employee._id}>
                 <td>{employee.name}</td>
                 <td>{employee.email}</td>
@@ -230,13 +302,8 @@ const EmployeeDashboard = () => {
                   </div>
                 </td>
                 <td>
-                  <button className="edit-btn">Edit</button>
-                  <button 
-                    className="delete-btn"
-                    onClick={() => handleDelete(employee._id)}
-                  >
-                    Delete
-                  </button>
+                  <button className="edit-btn" onClick={() => handleEdit(employee._id)}>Edit</button>
+                  <button className="delete-btn" onClick={() => handleDelete(employee._id)}>Delete</button>
                 </td>
               </tr>
             ))}

@@ -1,6 +1,8 @@
 // src/components/Dashboard/OrdersDashboard.scss
 .orders-dashboard {
     padding: 20px;
+    height: 100vh;
+    overflow: scroll;
     
     .dashboard-header {
       display: flex;
@@ -122,7 +124,7 @@
       }
     }
   
-    .view-btn {
+    .remove-btn {
       padding: 6px 12px;
       background-color: transparent;
       color: #2196f3;

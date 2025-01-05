@@ -135,12 +135,12 @@ const variants = {
       window.alert("Seding email")
 
       try {
-        await emailjs.sendForm(
-          'service_aerse5c',
-          'template_oa1c2aj',
-          formRef.current,
-          'bJ3dniHL1UCn5A3bs'
-        );
+        // await emailjs.sendForm(
+        //   'service_aerse5c',
+        //   'template_oa1c2aj',
+        //   formRef.current,
+        //   'bJ3dniHL1UCn5A3bs'
+        // );
         setError(false);
         setSent(true);
         window.alert("Email Sent Successfully")

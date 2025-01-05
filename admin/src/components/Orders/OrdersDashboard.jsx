@@ -1,94 +1,41 @@
-// src/components/Dashboard/OrdersDashboard.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import './OrdersDashboard.scss';
+import { toast } from 'react-toastify';
+import { CentralGovContext } from '../../context/CentralGovContext';
+
+// API Constants
+
 
 const OrdersDashboard = () => {
+  const {url}=useContext(CentralGovContext)
   const [orders, setOrders] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-
-  const sampleOrders = [
-    {
-      _id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '9876543210',
-      date: '2024-01-15',
-      address: '123 Main St, City',
-      package: 'Wedding Photography Premium',
-      photographerAssigned: '1',
-      status: 'pending'
-    },
-    {
-      _id: '2',
-      name: 'Sarah Smith',
-      email: 'sarah@example.com',
-      phone: '8765432109',
-      date: '2024-01-20',
-      address: '456 Park Ave, Town',
-      package: 'Birthday Party Basic',
-      photographerAssigned: '2',
-      status: 'accepted'
-    },
-    {
-      _id: '3',
-      name: 'Mike Johnson',
-      email: 'mike@example.com',
-      phone: '7654321098',
-      date: '2024-01-25',
-      address: '789 Oak Rd, Village',
-      package: 'Corporate Event Standard',
-      photographerAssigned: '',
-      status: 'rejected'
-    },
-    {
-      _id: '4',
-      name: 'Emily Brown',
-      email: 'emily@example.com',
-      phone: '6543210987',
-      date: '2024-02-01',
-      address: '321 Pine St, County',
-      package: 'Pre-wedding Shoot',
-      photographerAssigned: '3',
-      status: 'pending'
-    },
-    {
-      _id: '5',
-      name: 'David Wilson',
-      email: 'david@example.com',
-      phone: '5432109876',
-      date: '2024-02-05',
-      address: '654 Elm St, District',
-      package: 'Product Photography',
-      photographerAssigned: '',
-      status: 'accepted'
-    }
-  ];
-
-  // Sample data for employees/photographers
-  const sampleEmployees = [
-    { _id: '1', name: 'Alex Thompson' },
-    { _id: '2', name: 'Maria Garcia' },
-    { _id: '3', name: 'James Wilson' },
-    { _id: '4', name: 'Lisa Chen' }
-  ];
+  
+  const API_ENDPOINTS = {
+    getAllBookings: `${url}/api/admin/bookings/allbookings`,
+    // getAllBookings: `http://localhost:5002/api/admin/bookings/allbookings`,
+    removeBooking: (orderId) => `${url}/api/admin/bookings/remove/${orderId}`,
+    updateStatus: (orderId) => `${url}/api/admin/bookings/status/${orderId}`,
+    assignPhotographer: (orderId) => `${url}/api/admin/bookings/assign/${orderId}`,
+    getAllEmployees: `${url}/api/admin/employee/all-employees`
+  };
 
   useEffect(() => {
-    // fetchOrders();
-    // fetchEmployees();
-
-    setOrders(sampleOrders);
-    setEmployees(sampleEmployees);
+    fetchOrders();
+    fetchEmployees();
+    console.log(url)
   }, []);
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('/api/orders');
-      setOrders(response.data);
-      setOrders(sampleOrders);
+      setLoading(true);
+      const response = await axios.get(API_ENDPOINTS.getAllBookings);
+      console.log("This is admin orders",response.data.orders)
+      setOrders(response.data.orders);
     } catch (error) {
       console.error('Error fetching orders:', error);
     } finally {
@@ -98,8 +45,9 @@ const OrdersDashboard = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('/api/employees');
-      setEmployees(response.data);
+      const response = await axios.get(API_ENDPOINTS.getAllEmployees);
+      setEmployees(response.data.data);
+      console.log(response.data.data)
     } catch (error) {
       console.error('Error fetching employees:', error);
     }
@@ -107,7 +55,8 @@ const OrdersDashboard = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await axios.patch(`/api/orders/${orderId}`, { status: newStatus });
+      await axios.post(API_ENDPOINTS.updateStatus(orderId), { status: newStatus });
+      toast.success("Status updated")
       fetchOrders(); // Refresh orders after update
     } catch (error) {
       console.error('Error updating status:', error);
@@ -116,13 +65,53 @@ const OrdersDashboard = () => {
 
   const handlePhotographerAssign = async (orderId, employeeId) => {
     try {
-      await axios.patch(`/api/orders/${orderId}`, { 
-        photographerAssigned: employeeId 
+      await axios.post(API_ENDPOINTS.assignPhotographer(orderId), { 
+        photographerId: employeeId 
       });
       fetchOrders();
     } catch (error) {
       console.error('Error assigning photographer:', error);
     }
+  };
+
+  const handleRemoveOrder = async (orderId) => {
+    if (window.confirm('Are you sure you want to remove this order?')) {
+      try {
+        await axios.delete(API_ENDPOINTS.removeBooking(orderId));
+        fetchOrders();
+      } catch (error) {
+        console.error('Error removing order:', error);
+      }
+    }
+  };
+
+  const handleExportCSV = () => {
+    // Convert orders to CSV format
+    const headers = ['Client Name', 'Package', 'Date', 'Email', 'Phone', 'Address', 'Photographer', 'Status'];
+    const csvContent = [
+      headers.join(','),
+      ...orders.map(order => [
+        order.name,
+        order.package,
+        order.date,
+        order.email,
+        order.phone,
+        order.address,
+        employees.find(emp => emp._id === order.photographerAssigned)?.name || 'Unassigned',
+        order.status
+      ].join(','))
+    ].join('\n');
+
+    // Create and download CSV file
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `orders-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   };
 
   const filteredOrders = orders.filter(order => {
@@ -132,26 +121,24 @@ const OrdersDashboard = () => {
     return matchesSearch && matchesStatus;
   });
 
-//   if (loading) {
-//     return <div className="loading">Loading orders...</div>;
-//   }
+  if (loading) {
+    return <div className="loading">Loading orders...</div>;
+  }
 
   return (
     <div className="orders-dashboard">
-      {/* Dashboard Header */}
       <div className="dashboard-header">
         <h1>Orders Management</h1>
         <div className="header-actions">
-          <button className="action-btn" onClick={() => fetchOrders()}>
+          <button className="action-btn" onClick={fetchOrders}>
             Refresh
           </button>
-          <button className="action-btn">
+          <button className="action-btn" onClick={handleExportCSV}>
             Export CSV
           </button>
         </div>
       </div>
 
-      {/* Search and Filters */}
       <div className="dashboard-filters">
         <input
           type="text"
@@ -172,7 +159,6 @@ const OrdersDashboard = () => {
         </select>
       </div>
 
-      {/* Orders Table */}
       <div className="table-container">
         <table className="orders-table">
           <thead>
@@ -191,7 +177,7 @@ const OrdersDashboard = () => {
             {filteredOrders.map((order) => (
               <tr key={order._id}>
                 <td>{order.name}</td>
-                <td>{order.package}</td>
+                <td>₹{order.paymentDetails.amount}</td>
                 <td>{new Date(order.date).toLocaleDateString()}</td>
                 <td>
                   <div className="contact-info">
@@ -201,19 +187,22 @@ const OrdersDashboard = () => {
                 </td>
                 <td>{order.address}</td>
                 <td>
-                  <select
-                    value={order.photographerAssigned || ''}
-                    onChange={(e) => handlePhotographerAssign(order._id, e.target.value)}
-                    className="photographer-select"
-                  >
-                    <option value="">Assign Photographer</option>
-                    {employees.map((emp) => (
-                      <option key={emp._id} value={emp._id}>
-                        {emp.name}
-                      </option>
-                    ))}
-                  </select>
-                </td>
+  <select
+    value={order.photographerAssigned?._id || ''}
+    onChange={(e) => handlePhotographerAssign(order._id, e.target.value)}
+    className="photographer-select"
+  >
+    {!order.photographerAssigned && (
+      <option value="">Assign Photographer</option>
+    )}
+    {employees.map((emp) => (
+      <option key={emp._id} value={emp._id}>
+        {emp.name}
+      </option>
+    ))}
+  </select>
+</td>
+
                 <td>
                   <select
                     value={order.status}
@@ -226,7 +215,15 @@ const OrdersDashboard = () => {
                   </select>
                 </td>
                 <td>
-                  <button className="view-btn">View Details</button>
+                  <div className="action-buttons">
+                    {/* <button className="view-btn">View Details</button> */}
+                    <button 
+                      className="remove-btn" 
+                      onClick={() => handleRemoveOrder(order._id)}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
