@@ -16,10 +16,7 @@ import LoginPage from './components/LoginPage/LoginPage'
 
 const App = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-
-
- 
-
+  
   return (
     <div className='main-page'>
       <ToastContainer/>

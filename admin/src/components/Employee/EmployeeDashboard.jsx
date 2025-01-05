@@ -5,9 +5,10 @@ import { CentralGovContext } from '../../context/CentralGovContext';
 import './EmployeeDashboard.scss';
 import { EmployeeContext } from '../../context/EmployeeContext';
 import {toast} from 'react-toastify'
+import {Navigate} from 'react-router-dom'
 
 const EmployeeDashboard = () => {
-  const { token, url } = useContext(CentralGovContext);
+  const { token, url,adminToken } = useContext(CentralGovContext);
   const { allEmployee } = useContext(EmployeeContext)
   const [employees, setEmployees] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -31,7 +32,7 @@ const EmployeeDashboard = () => {
     }
   }, [allEmployee]);  // Will run every time allEmployees changes
 
-  if (!allEmployee) {
+  if (!allEmployee && adminToken) {
     // Display loading or some message until data is fetched
     return <div>Loading employees...</div>;
   }
@@ -108,6 +109,7 @@ const EmployeeDashboard = () => {
             headers: { Authorization: `Bearer ${token}` },
           })
           console.log(res.data)
+          toast.success("Employee deleted successfully")
           
       }
       
@@ -135,6 +137,10 @@ const EmployeeDashboard = () => {
     emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     emp.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if(!adminToken){
+    return <Navigate to="/" />
+  }
 
   return (
     <div className="employee-dashboard">

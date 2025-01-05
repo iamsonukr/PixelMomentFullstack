@@ -8,7 +8,7 @@ import {adminAccessRouter} from './routes/adminAccess.routes.js';
 import bookingRouter from './routes/booking.routes.js';
 
 
-const PORT=5002;
+const PORT=process.env.PORT;
 const app=express()
 
 app.use(express.json());

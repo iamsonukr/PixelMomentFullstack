@@ -2,16 +2,19 @@ import { Children, useState } from "react";
 import { useContext,useEffect } from "react";
 import { createContext } from "react";
 import axios from 'axios'
+import { CentralGovContext } from "./CentralGovContext";
 
 export const EmployeeContext=createContext(null)
 
 const EmployeeContextProvider=(prop)=>{
+  const {url}=useContext(CentralGovContext)
     const [allEmployee,setAllEmployee]=useState(null)
+
 
       // Fetch employees on mount
   const getEmployees=async()=>{
     try {
-      const result=await axios.get(`http://localhost:5002/api/admin/employee/all-employees`)
+      const result=await axios.get(`${url}/api/admin/employee/all-employees`)
       console.log(result.data.data )
       setAllEmployee(result.data.data)
     } catch (error) {
@@ -21,7 +24,6 @@ const EmployeeContextProvider=(prop)=>{
 
   useEffect(()=>{
     getEmployees()
-
   },[])
   useEffect(() => {
     if(allEmployee){

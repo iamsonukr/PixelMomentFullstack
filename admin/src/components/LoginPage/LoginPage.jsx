@@ -6,7 +6,8 @@ import './LoginPage.scss';
 import { CentralGovContext } from '../../context/CentralGovContext';
 
 const LoginPage = () => {
-    const {url} =useContext(CentralGovContext)
+    const {url ,adminToken, setAdminToken} =useContext(CentralGovContext)
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -51,6 +52,8 @@ const LoginPage = () => {
         // Store token in localStorage
         localStorage.setItem('adminToken', response.data.token);
         localStorage.setItem('adminName', response.data.message.split('Welcome back ')[1]);
+        setAdminToken(response.data.token);
+        
         
         // Redirect to dashboard
         navigate('/bookings');
