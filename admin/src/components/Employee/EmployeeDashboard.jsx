@@ -32,10 +32,10 @@ const EmployeeDashboard = () => {
     }
   }, [allEmployee]);  // Will run every time allEmployees changes
 
-  if (!allEmployee && adminToken) {
-    // Display loading or some message until data is fetched
-    return <div>Loading employees...</div>;
-  }
+  // if (!allEmployee && adminToken) {
+  //   // Display loading or some message until data is fetched
+  //   return <div>Loading employees...</div>;
+  // }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
