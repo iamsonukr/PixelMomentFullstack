@@ -8,13 +8,13 @@ import { CentralGovContext } from '../../context/CentralGovContext';
 
 
 const OrdersDashboard = () => {
-  const {url}=useContext(CentralGovContext)
+  const { url } = useContext(CentralGovContext)
   const [orders, setOrders] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  
+
   const API_ENDPOINTS = {
     getAllBookings: `${url}/api/admin/bookings/allbookings`,
     // getAllBookings: `http://localhost:5002/api/admin/bookings/allbookings`,
@@ -34,7 +34,7 @@ const OrdersDashboard = () => {
     try {
       setLoading(true);
       const response = await axios.get(API_ENDPOINTS.getAllBookings);
-      console.log("This is admin orders",response.data.orders)
+      console.log("This is admin orders", response.data.orders)
       setOrders(response.data.orders);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -65,8 +65,8 @@ const OrdersDashboard = () => {
 
   const handlePhotographerAssign = async (orderId, employeeId) => {
     try {
-      await axios.post(API_ENDPOINTS.assignPhotographer(orderId), { 
-        photographerId: employeeId 
+      await axios.post(API_ENDPOINTS.assignPhotographer(orderId), {
+        photographerId: employeeId
       });
       fetchOrders();
     } catch (error) {
@@ -116,7 +116,7 @@ const OrdersDashboard = () => {
 
   const filteredOrders = orders.filter(order => {
     const matchesSearch = order.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         order.email.toLowerCase().includes(searchTerm.toLowerCase());
+      order.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -147,7 +147,7 @@ const OrdersDashboard = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
         />
-        <select 
+        <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           className="status-filter"
@@ -187,21 +187,21 @@ const OrdersDashboard = () => {
                 </td>
                 <td>{order.address}</td>
                 <td>
-  <select
-    value={order.photographerAssigned?._id || ''}
-    onChange={(e) => handlePhotographerAssign(order._id, e.target.value)}
-    className="photographer-select"
-  >
-    {!order.photographerAssigned && (
-      <option value="">Assign Photographer</option>
-    )}
-    {employees.map((emp) => (
-      <option key={emp._id} value={emp._id}>
-        {emp.name}
-      </option>
-    ))}
-  </select>
-</td>
+                  <select
+                    value={order.photographerAssigned?._id || ''}
+                    onChange={(e) => handlePhotographerAssign(order._id, e.target.value)}
+                    className="photographer-select"
+                  >
+                    {!order.photographerAssigned && (
+                      <option value="">Assign Photographer</option>
+                    )}
+                    {employees.map((emp) => (
+                      <option key={emp._id} value={emp._id}>
+                        {emp.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
 
                 <td>
                   <select
@@ -217,8 +217,8 @@ const OrdersDashboard = () => {
                 <td>
                   <div className="action-buttons">
                     {/* <button className="view-btn">View Details</button> */}
-                    <button 
-                      className="remove-btn" 
+                    <button
+                      className="remove-btn"
                       onClick={() => handleRemoveOrder(order._id)}
                     >
                       Remove

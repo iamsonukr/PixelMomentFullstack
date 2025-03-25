@@ -77,8 +77,8 @@ const updateOrderStatus = async (req, res) => {
 
 // Assign photographer to order
 const assignPhotographer = async (req, res) => {
-    console.log("assinging phototgrapher")
-    console.log(req.body)
+  console.log("assinging phototgrapher")
+  console.log(req.body)
   try {
     const { orderId } = req.params;
     const { photographerId } = req.body;
@@ -119,34 +119,34 @@ const assignPhotographer = async (req, res) => {
 };
 
 const getAllOrders = async (req, res) => {
-    // getAllOrders: async (req, res) => {
-        try {
-          const orders = await OrderModel.find()
-            .populate('photographerAssigned') // This will only populate if photographer is assigned
-            .sort({ createdAt: -1 }); // Most recent first
-          
-          // Map through orders to format response
-          const formattedOrders = orders.map(order => ({
-            ...order._doc,
-            hasPhotographer: !!order.photographerAssigned // Boolean flag for easier frontend handling
-          }));
-    
-          return res.status(200).json({
-            success: true,
-            count: orders.length,
-            orders: formattedOrders
-          });
-        } catch (error) {
-          return res.status(500).json({
-            success: false,
-            message: 'Error fetching orders',
-            error: error.message
-          });
-        }
-      }
+  // getAllOrders: async (req, res) => {
+  try {
+    const orders = await OrderModel.find()
+      .populate('photographerAssigned') // This will only populate if photographer is assigned
+      .sort({ createdAt: -1 }); // Most recent first
 
-  
+    // Map through orders to format response
+    const formattedOrders = orders.map(order => ({
+      ...order._doc,
+      hasPhotographer: !!order.photographerAssigned // Boolean flag for easier frontend handling
+    }));
 
-  
+    return res.status(200).json({
+      success: true,
+      count: orders.length,
+      orders: formattedOrders
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error fetching orders',
+      error: error.message
+    });
+  }
+}
 
-export { getAllOrders,deleteOrder, updateOrderStatus, assignPhotographer };
+
+
+
+
+export { getAllOrders, deleteOrder, updateOrderStatus, assignPhotographer };

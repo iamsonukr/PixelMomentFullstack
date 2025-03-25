@@ -1,0 +1,76 @@
+// Loader.scss
+@keyframes rotate-lens {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-aperture {
+  0%, 100% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+
+.photo-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .loader-lens {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    animation: rotate-lens 2s linear infinite;
+  }
+
+  .loader-aperture {
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+    background-color: #333;
+    animation: pulse-aperture 1.5s ease-in-out infinite;
+  }
+
+  .loader-reflection {
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    width: 15px;
+    height: 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+  }
+
+  .loader-text {
+    font-family: 'Arial', sans-serif;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 14px;
+  }
+}

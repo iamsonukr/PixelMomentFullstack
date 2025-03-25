@@ -3,6 +3,7 @@ import './contact.scss';
 import { motion, useInView } from 'framer-motion';
 import axios from 'axios';
 import emailjs, { send } from '@emailjs/browser';
+import PleaseWait from '../PleaseWait/PleaseWait';
 
 
 
@@ -54,10 +55,6 @@ const variants = {
       e.preventDefault();
       console.log(orderData)
       console.log(formRef.current)
-      if (submitting) {
-        window.alert("Please wait payment in progress...");
-        return;
-      }
       setSubmitting(true);
       try {
         // setPaymentProgress(true);
@@ -163,6 +160,7 @@ const variants = {
       animate={isInView ? 'animate' : 'initial'}
       id="contact-me"
     >
+      {submitting ? <PleaseWait/> :""}
       <motion.div className="textContainer" variants={variants}>
         <motion.h1>Let's work together</motion.h1>
         <motion.div className="item" variants={variants}>
@@ -214,7 +212,7 @@ const variants = {
 
           <button type="submit">Book Now</button>
           {sent && (error ? 'Booking Failed' : 'Order Sent Successfully')}
-          <button onClick={sendRealEmail} >Send mail</button>
+          {/* <button onClick={sendRealEmail} >Send mail</button> */}
         </motion.form>
       </div>
     </motion.div>
