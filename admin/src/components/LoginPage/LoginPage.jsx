@@ -53,8 +53,6 @@ const LoginPage = () => {
         localStorage.setItem('adminToken', response.data.token);
         localStorage.setItem('adminName', response.data.message.split('Welcome back ')[1]);
         setAdminToken(response.data.token);
-        
-        
         // Redirect to dashboard
         navigate('/bookings');
       }

@@ -10,15 +10,18 @@ const CentralGovProvider = ({ children }) => {
 
     // const url=`http://localhost:5009`
     const url=`https://pixelmomentfullstack.onrender.com`
-
-
-
     const govValues={
         url,
         adminToken,
         setAdminToken
- 
     }
+
+    useEffect(()=>{
+        const token=localStorage.getItem('adminToken')
+        if(token){
+            setAdminToken(token)
+        }
+    },[])
 
     return(
         <>

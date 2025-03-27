@@ -13,6 +13,7 @@ const EmployeeDashboard = () => {
   const [employees, setEmployees] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading,setLoading]=useState(false)
   
   const [formData, setFormData] = useState({
     name: '',
@@ -64,6 +65,7 @@ const EmployeeDashboard = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       let endPoint='';
       if(editingEmployeeId){
@@ -83,6 +85,8 @@ const EmployeeDashboard = () => {
       setShowForm(false)
     } catch (error) {
       console.log(error)
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -99,22 +103,27 @@ const EmployeeDashboard = () => {
       console.log(response)
     } catch (error) {
         console.log(error)
+    }finally{
+      setLoading(false)
     }
   };
 
   const handleDelete = (id) => {
+    setLoading(true)
     try {
       if (window.confirm('Are you sure you want to delete this employee?')) {
         const res=axios.post(`${url}/api/admin/employee/remove-employee/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           })
+          
           console.log(res.data)
           toast.success("Employee deleted successfully")
-          
       }
       
     } catch (error) {
       console.log(error)
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -145,6 +154,7 @@ const EmployeeDashboard = () => {
   return (
     <div className="employee-dashboard">
       {/* Header Section */}
+      {loading?<PhotoLoader/>:"" }
       <div className="dashboard-header">
         <h1>Employee Management</h1>
         <button className="add-btn" onClick={() => setShowForm(true)}>

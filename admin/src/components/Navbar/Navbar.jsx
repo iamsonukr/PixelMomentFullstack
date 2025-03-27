@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Camera, User, LogOut, ChevronDown } from 'lucide-react';
 import './Navbar.scss';
+import { CentralGovContext } from '../../context/CentralGovContext';
 
 const Navbar = () => {
+  const {adminToken }=useContext(CentralGovContext)
   const navigate = useNavigate();
   const [adminName, setAdminName] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -36,7 +38,7 @@ const Navbar = () => {
           <span className="admin-name">{adminName}</span>
           <ChevronDown size={16} />
 
-          {showDropdown && (
+          {showDropdown && adminToken && (
             <div className="dropdown-menu">
               <button className="logout-button" onClick={handleLogout}>
                 <LogOut size={16} />

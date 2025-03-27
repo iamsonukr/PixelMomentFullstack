@@ -1,15 +1,16 @@
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import './OrdersDashboard.scss';
+import './Customers.scss';
 import { toast } from 'react-toastify';
 import { CentralGovContext } from '../../context/CentralGovContext';
-import { useNavigate } from 'react-router-dom';
+import { Loader } from 'lucide-react';
 import PhotoLoader from '../../SubComponenets/Loader/PhotoLoader';
+import { useNavigate } from 'react-router-dom';
 
 // API Constants
 
 
-const OrdersDashboard = () => {
+const Cusomters = () => {
   const { url,adminToken } = useContext(CentralGovContext)
   const [orders, setOrders] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -37,8 +38,10 @@ const OrdersDashboard = () => {
     try {
       setLoading(true);
       const response = await axios.get(API_ENDPOINTS.getAllBookings);
-      console.log("This is admin orders", response.data.orders)
-      setOrders(response.data.orders);
+      const uniqueCustomers = [...new Map(response.data.orders.map(order => [order.email, order])).values()];
+      setOrders(uniqueCustomers);
+      // const uniqueCusommers=orders.
+
     } catch (error) {
       console.error('Error fetching orders:', error);
     } finally {
@@ -66,17 +69,6 @@ const OrdersDashboard = () => {
     }
   };
 
-  const handlePhotographerAssign = async (orderId, employeeId) => {
-    try {
-      await axios.post(API_ENDPOINTS.assignPhotographer(orderId), {
-        photographerId: employeeId
-      });
-      fetchOrders();
-    } catch (error) {
-      console.error('Error assigning photographer:', error);
-    }
-  };
-
   const handleRemoveOrder = async (orderId) => {
     if (window.confirm('Are you sure you want to remove this order?')) {
       try {
@@ -90,15 +82,12 @@ const OrdersDashboard = () => {
 
   const handleExportCSV = () => {
     // Convert orders to CSV format
-    const headers = ['Client Name', 'Package', 'Date', 'Email', 'Phone', 'Address', 'Photographer', 'Status'];
+    const headers = ['Client Name','Email', 'Phone', 'Address'];
     const csvContent = [
       headers.join(','),
       ...orders.map(order => [
         order.name,
-        order.package,
-        order.date,
         order.email,
-        order.phone,
         order.address,
         employees.find(emp => emp._id === order.photographerAssigned)?.name || 'Unassigned',
         order.status
@@ -124,15 +113,15 @@ const OrdersDashboard = () => {
     return matchesSearch && matchesStatus;
   });
 
-  if (loading) {
-    return <PhotoLoader/> ;
+  if(!adminToken){
+    return navigate('/')
   }
-if(!adminToken){
-  navigate('/')
-}
+
+
   return (
-    <div className="orders-dashboard">
+    <div className="customer-dashboard">
       <div className="dashboard-header">
+        {loading?<PhotoLoader/>:"" }
         <h1>Orders Management</h1>
         <div className="header-actions">
           <button className="action-btn" onClick={fetchOrders}>
@@ -143,7 +132,6 @@ if(!adminToken){
           </button>
         </div>
       </div>
-
       <div className="dashboard-filters">
         <input
           type="text"
@@ -152,7 +140,7 @@ if(!adminToken){
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
         />
-        <select
+        {/* <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           className="status-filter"
@@ -161,7 +149,7 @@ if(!adminToken){
           <option value="pending">Pending</option>
           <option value="accepted">Accepted</option>
           <option value="rejected">Rejected</option>
-        </select>
+        </select> */}
       </div>
 
       <div className="table-container">
@@ -169,12 +157,12 @@ if(!adminToken){
           <thead>
             <tr>
               <th>Client Name</th>
-              <th>Package</th>
-              <th>Date</th>
+              {/* <th>Package</th> */}
+              {/* <th>Date</th> */}
               <th>Contact</th>
               <th>Address</th>
-              <th>Photographer</th>
-              <th>Status</th>
+              {/* <th>Photographer</th> */}
+              {/* <th>Status</th> */}
               <th>Actions</th>
             </tr>
           </thead>
@@ -182,8 +170,8 @@ if(!adminToken){
             {filteredOrders.map((order) => (
               <tr key={order._id}>
                 <td>{order.name}</td>
-                <td>₹{order.paymentDetails.amount}</td>
-                <td>{new Date(order.date).toLocaleDateString()}</td>
+                {/* <td>₹{order.paymentDetails.amount}</td> */}
+                {/* <td>{new Date(order.date).toLocaleDateString()}</td> */}
                 <td>
                   <div className="contact-info">
                     <span>{order.email}</span>
@@ -191,7 +179,7 @@ if(!adminToken){
                   </div>
                 </td>
                 <td>{order.address}</td>
-                <td>
+                {/* <td>
                   <select
                     value={order.photographerAssigned?._id || ''}
                     onChange={(e) => handlePhotographerAssign(order._id, e.target.value)}
@@ -206,9 +194,9 @@ if(!adminToken){
                       </option>
                     ))}
                   </select>
-                </td>
+                </td> */}
 
-                <td>
+                {/* <td>
                   <select
                     value={order.status}
                     onChange={(e) => handleStatusChange(order._id, e.target.value)}
@@ -218,7 +206,7 @@ if(!adminToken){
                     <option value="accepted">Accepted</option>
                     <option value="rejected">Rejected</option>
                   </select>
-                </td>
+                </td> */}
                 <td>
                   <div className="action-buttons">
                     {/* <button className="view-btn">View Details</button> */}
@@ -239,4 +227,4 @@ if(!adminToken){
   );
 };
 
-export default OrdersDashboard;
+export default Cusomters;

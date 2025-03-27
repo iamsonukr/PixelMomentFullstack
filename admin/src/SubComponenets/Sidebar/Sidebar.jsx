@@ -20,8 +20,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     { title: 'Bookings', icon: Calendar, path: '/bookings' },
     // { title: 'Dashboard', icon: Home, path: '/' },
     { title: 'Employees', icon: BriefcaseBusiness, path: '/employee' },
-    { title: 'Video Orders', icon: Video, path: '/video-orders' },
-    { title: 'All Orders', icon: ShoppingCart, path: '/orders' },
+    // { title: 'Video Orders', icon: Video, path: '/video-orders' },
+    // { title: 'All Orders', icon: ShoppingCart, path: '/orders' },
     { title: 'Customers', icon: Users, path: '/customers' },
     { title: 'Settings', icon: Settings, path: '/settings' },
   ];
