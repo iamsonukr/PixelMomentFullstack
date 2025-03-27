@@ -6,6 +6,7 @@ import './EmployeeDashboard.scss';
 import { EmployeeContext } from '../../context/EmployeeContext';
 import {toast} from 'react-toastify'
 import {Navigate} from 'react-router-dom'
+import PhotoLoader from '../../SubComponenets/Loader/PhotoLoader';
 
 const EmployeeDashboard = () => {
   const { token, url,adminToken } = useContext(CentralGovContext);
@@ -154,7 +155,7 @@ const EmployeeDashboard = () => {
   return (
     <div className="employee-dashboard">
       {/* Header Section */}
-      {loading?<PhotoLoader/>:"" }
+      {!allEmployee?<PhotoLoader/>:"" }
       <div className="dashboard-header">
         <h1>Employee Management</h1>
         <button className="add-btn" onClick={() => setShowForm(true)}>
