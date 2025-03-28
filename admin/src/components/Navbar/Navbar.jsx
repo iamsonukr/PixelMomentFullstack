@@ -5,21 +5,22 @@ import './Navbar.scss';
 import { CentralGovContext } from '../../context/CentralGovContext';
 
 const Navbar = () => {
-  const {adminToken }=useContext(CentralGovContext)
+  const {adminToken, adminName,setAdminName }=useContext(CentralGovContext)
   const navigate = useNavigate();
-  const [adminName, setAdminName] = useState('');
+  const [, ] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
 
-  useEffect(() => {
-    const name = localStorage.getItem('adminName');
-    if (name) {
-      setAdminName(name);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const name = localStorage.getItem('adminName');
+  //   if (name) {
+  //     setAdminName(name);
+  //   }
+  // }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminName');
+    setAdminName("")
     navigate('/');
   };
 

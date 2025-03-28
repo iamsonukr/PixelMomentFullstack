@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import axios from 'axios';
 import emailjs, { send } from '@emailjs/browser';
 import PleaseWait from '../PleaseWait/PleaseWait';
+import { toast } from 'react-toastify';
 
 
 
@@ -96,6 +97,7 @@ const variants = {
               }
             } catch (error) {
               console.error("Payment validation failed:", error);
+              toast.error("Something went wrong !")
             } finally {
               setPaymentProgress(false);
             }
@@ -116,6 +118,7 @@ const variants = {
         });
         paymentWindow.open();
       } catch (error) {
+        window.alert("Something went wrong.")
         console.error("Payment initiation failed:", error);
       } finally {
         setSubmitting(false);

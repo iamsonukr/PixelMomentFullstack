@@ -9,6 +9,7 @@ import PleaseWait from './components/PleaseWait/PleaseWait';
 import Portfolio from './components/portfolio/Portfolio';
 import PricingSection from './components/pricing/PricingSection';
 import Services from './components/services/Services';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   // const url='https://pixelmomentfullstack.onrender.com'
@@ -20,6 +21,7 @@ function App() {
   }else{
 
     return (
+      <>
       <div>
       {/* <Cursor/> */}
       <section id='Homepage'>
@@ -34,6 +36,8 @@ function App() {
       <PricingSection />
       <section id='Contact'><Contact url={url} paymentProgress={paymentProgress} setPaymentProgress={setPaymentProgress} /></section>
     </div>
+      {/* <ToastContainer/> */}
+      </>
   );
 }
 }

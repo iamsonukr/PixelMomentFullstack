@@ -6,7 +6,7 @@ import './LoginPage.scss';
 import { CentralGovContext } from '../../context/CentralGovContext';
 
 const LoginPage = () => {
-    const {url ,adminToken, setAdminToken} =useContext(CentralGovContext)
+    const {url ,adminToken, setAdminToken,setAdminName} =useContext(CentralGovContext)
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -47,11 +47,11 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(`${url}/api/admin/access/login`, formData);
-      
       if (response.data.success) {
         // Store token in localStorage
         localStorage.setItem('adminToken', response.data.token);
         localStorage.setItem('adminName', response.data.message.split('Welcome back ')[1]);
+        setAdminName(response.data.message.split('Welcome back ')[1])
         setAdminToken(response.data.token);
         // Redirect to dashboard
         navigate('/bookings');

@@ -7,13 +7,15 @@ export const CentralGovContext=createContext(null)
 
 const CentralGovProvider = ({ children }) => {
     const [adminToken, setAdminToken] = useState('');
-
+    const [adminName,setAdminName]=useState("")
     // const url=`http://localhost:5009`
     const url=`https://pixelmomentfullstack.onrender.com`
     const govValues={
         url,
         adminToken,
-        setAdminToken
+        setAdminToken,
+        adminName,
+        setAdminName
     }
 
     useEffect(()=>{
@@ -22,6 +24,8 @@ const CentralGovProvider = ({ children }) => {
             setAdminToken(token)
         }
     },[])
+
+   
 
     return(
         <>
